@@ -49,6 +49,6 @@ collection = {
   features: features
 }
 
-File.open("dentists.geojson", "w+") do |dentist|
+File.open("public/geo-json/dentists.geojson", "w+") do |dentist|
   dentist.puts collection.to_json
 end
