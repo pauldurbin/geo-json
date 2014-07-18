@@ -1,7 +1,12 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    bson (1.10.2)
+    bson_ext (1.10.2)
+      bson (~> 1.10.2)
     minitest (5.3.4)
+    mongo (1.10.2)
+      bson (= 1.10.2)
     rack (1.5.2)
     rack-protection (1.5.3)
       rack
@@ -19,7 +24,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bson_ext
   minitest
+  mongo
   rack-test
   rake
   rdiscount

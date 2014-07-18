@@ -3,6 +3,8 @@ ruby "2.1.2"
 
 gem 'sinatra'
 gem 'rdiscount'
+gem 'mongo'
+gem 'bson_ext'
 
 group :test do
  gem 'minitest'

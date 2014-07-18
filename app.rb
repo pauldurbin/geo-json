@@ -1,5 +1,7 @@
 require 'sinatra/base'
 require 'rdiscount'
+require 'mongo'
+require 'json/ext'
 
 class GeoJSONClient < Sinatra::Base
  get '/:file?' do

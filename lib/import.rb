@@ -19,8 +19,13 @@
 # row[17] => Website
 # row[18] => Fax
 
+require 'sinatra/base'
 require 'csv'
 require 'json'
+require 'mongo'
+
+db = Connection.new.db('geo-json')
+services = db.collection('services')
 
 features = []
 
@@ -32,23 +37,26 @@ CSV.foreach('/Users/pdurbin/Workspace/nhs/geo-json/data/Dentists.csv', encoding:
     properties[key] = value unless value.nil? || ['OrganisationID', 'Latitude', 'Longitude'].include?(key)
   end
 
-  feature = {
-    type: "Feature",
-    id: row[0],
-    geometry: {
-      type: "Point",
-      coordinates: [row[14].to_f, row[13].to_f]
-    },
-    properties: properties
-  }
-  features.push(feature)
+  services.insert Hash.new({ id: row[0], coordinates: [row[14].to_f, row[13].to_f], properties: properties })
+
+  print '.'
+  # feature = {
+  #   type: "Feature",
+  #   id: row[0],
+  #   geometry: {
+  #     type: "Point",
+  #     coordinates: [row[14].to_f, row[13].to_f]
+  #   },
+  #   properties: properties
+  # }
+  # features.push(feature)
 end
 
-collection = {
-  type: 'FeatureCollection',
-  features: features
-}
-
-File.open("public/geo-json/dentists.geojson", "w+") do |dentist|
-  dentist.puts collection.to_json
-end
+# collection = {
+#   type: 'FeatureCollection',
+#   features: features
+# }
+# 
+# File.open("public/geo-json/dentists.geojson", "w+") do |dentist|
+#   dentist.puts collection.to_json
+# end
