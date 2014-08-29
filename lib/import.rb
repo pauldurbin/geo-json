@@ -19,15 +19,8 @@
 # row[17] => Website
 # row[18] => Fax
 
-require 'sinatra/base'
+require './app.rb'
 require 'csv'
-require 'json'
-require 'mongo'
-
-db = Connection.new.db('geo-json')
-services = db.collection('services')
-
-features = []
 
 CSV.foreach('/Users/pdurbin/Workspace/nhs/geo-json/data/Dentists.csv', encoding: 'windows-1251:utf-8', col_sep: '¬', headers: :first_row) do |row|
   next if row['Latitude'].nil?
@@ -37,20 +30,12 @@ CSV.foreach('/Users/pdurbin/Workspace/nhs/geo-json/data/Dentists.csv', encoding:
     properties[key] = value unless value.nil? || ['OrganisationID', 'Latitude', 'Longitude'].include?(key)
   end
 
-  services.insert Hash.new({ id: row[0], coordinates: [row[14].to_f, row[13].to_f], properties: properties })
+  Service.create({ service_id: row[0], location: [row[13].to_f, row[14].to_f], properties: properties })
 
   print '.'
-  # feature = {
-  #   type: "Feature",
-  #   id: row[0],
-  #   geometry: {
-  #     type: "Point",
-  #     coordinates: [row[14].to_f, row[13].to_f]
-  #   },
-  #   properties: properties
-  # }
-  # features.push(feature)
 end
+
+puts 'Done. '
 
 # collection = {
 #   type: 'FeatureCollection',
