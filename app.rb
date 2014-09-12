@@ -12,7 +12,7 @@ class Service
 
   key :service_id,  String
   key :location,    Array
-  key :properties,  Array
+  key :properties,  Hash
 
   ensure_index [[:location, '2d']]
 end
@@ -32,7 +32,7 @@ class GeoJSONClient < Sinatra::Base
             "type" => "Point",
             "coordinates" => s.location.reverse
           },
-          "properties" => ''
+          "properties" => s.properties
         }
       end
     }.to_json

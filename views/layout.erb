@@ -7,45 +7,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Geo JSON Client</title>
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/foundation.css">
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/foundation.css">
+    <link rel="stylesheet" href="/css/jquery-ui.min.css">
+    <link rel="stylesheet" href="/css/map.css">
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-migrate-1.0.0.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
+    <script type="text/javascript" src="/js/autocomplete.js"></script>
+    <script type="text/javascript" src="/js/map.js"></script>
     <style>
-    #jsonMap img { max-width: none; }
-    </style>
-    <script src="js/vendor/custom.modernizr.js"></script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
-    <script type="text/javascript">
-      function initialize() {
-        var mapOptions = {
-          center: new google.maps.LatLng(54, -2),
-          zoom: 11
-        };
-        var map = new google.maps.Map(document.getElementById("jsonMap"), mapOptions);
-        var infoWindow = new google.maps.InfoWindow({ content: "" });
-
-        map.data.addListener('click', function(event) {
-          //show an infowindow on click   
-          infoWindow.setContent('<div style="line-height:1.35;overflow:hidden;white-space:nowrap;">'+
-                  event.feature.getProperty("OrganisationName") +"<br/>" + event.feature.getProperty("Postcode") + "</div>");
-          var anchor = new google.maps.MVCObject();
-          anchor.set("position", event.latLng);
-          infoWindow.open(map, anchor);
-        });
-        
-        google.maps.event.addListener(map, 'idle', function(event) {
-          var bounds = map.getBounds();
-
-          var ne = bounds.getNorthEast();
-          var sw = bounds.getSouthWest();
-
-          map.data.loadGeoJson('/geo/dentists.geojson?ne=' + ne.lat() + ',' + ne.lng() + '&sw=' + sw.lat() + ',' + sw.lng());
-        });
-      }
-      google.maps.event.addDomListener(window, 'load', initialize);
-      
-    </script>
-    <style>
-      #jsonMap { width: 100%; height: 800px; }
+      #jsonMap { width: 100%; height: 500px; }
+      #jsonMap img { max-width: none; }
       img{ float: right; }
     </style>
   </head>
@@ -59,24 +34,16 @@
               href="#"><span></span></a></li>
         </ul>
         <section class="top-bar-section">
-           <!-- Right Nav Section -->
            <ul class="right">
               <li><a href="/">Home</a></li>
-              <!-- <li><a href="/about">About</a></li>
-              <li><a href="/contact">Contact</a></li> -->
            </ul>
         </section>
      </nav>
+
      <div class="row">
         <div class="large-12 columns">
            <%= yield %>
         </div>
      </div>
-     <script src="js/vendor/jquery.js"></script>
-     <script src="js/foundation.min.js"></script>
-     <script src="js/foundation/foundation.topbar.js"></script>
-     <script>
-        $(document).foundation();
-     </script>
   </body>
 </html>
