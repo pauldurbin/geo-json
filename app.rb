@@ -13,14 +13,24 @@ class Service
   key :service_id,  String
   key :location,    Array
   key :properties,  Hash
+  key :type,        String
+
+  def icon
+    "/images/icons/#{type}.png"
+  end
 
   ensure_index [[:location, '2d']]
 end
 
 class GeoJSONClient < Sinatra::Base
-  get '/geo/dentists.geojson' do
+  get '/geo/services.geojson' do
     content_type :json
-    @services = Service.where(:location => {"$within" => {"$box" => box}})
+    type = params[:type].blank? ? [] : params[:type].split(',')
+    @services = if type.size > 0
+      Service.where(type: type, :location => {"$within" => {"$box" => box}})
+    else
+      Service.where(:location => {"$within" => {"$box" => box}})
+    end
 
     {
       "type" => "FeatureCollection",
@@ -32,7 +42,7 @@ class GeoJSONClient < Sinatra::Base
             "type" => "Point",
             "coordinates" => s.location.reverse
           },
-          "properties" => s.properties
+          "properties" => s.properties.merge({icon: s.icon})
         }
       end
     }.to_json
